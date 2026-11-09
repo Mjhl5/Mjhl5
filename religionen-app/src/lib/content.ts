@@ -26,6 +26,8 @@ const RELACC: Record<string, string[]> = {
   Buddhismus: ['buddhistisch', 'Buddhisten', 'Buddha'],
 };
 
+const WO: Record<string, string> = { USA: 'Wo liegen die USA?', Philippinen: 'Wo liegen die Philippinen?', Mongolei: 'Wo liegt die Mongolei?', Iran: 'Wo liegt der Iran?' };
+
 export function buildLaenderItems(): Item[] {
   const items: Item[] = [];
   for (const L of LAENDER) {
@@ -54,7 +56,7 @@ export function buildLaenderItems(): Item[] {
     items.push({ id: `l-${L.nr}-map`, topic: 'laender', sub: 'Karte', kind: 'map', mapNo: L.nr,
       prompts: [`Welches Land hat auf der Karte die Nummer ${L.nr}?`], answer: L.land, accept: L.landAlt, pool: 'land', mnemonic: merk });
     items.push({ id: `l-${L.nr}-mapclick`, topic: 'laender', sub: 'Karte', kind: 'mapclick', mapNo: L.nr,
-      prompts: [`Wo liegt ${L.land}? Tippe auf die richtige Nummer.`], answer: String(L.nr), mnemonic: merk });
+      prompts: [`${WO[L.land] ?? `Wo liegt ${L.land}?`} Tippe auf die richtige Nummer.`], answer: String(L.nr), mnemonic: merk });
   }
   return items;
 }
