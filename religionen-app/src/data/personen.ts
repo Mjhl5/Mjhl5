@@ -54,4 +54,4 @@ export const PERSONEN_STANDARD: Person[] = [
 
 export const PERSONEN_HINWEIS =
   'Aus der Namensliste Judentum ergeben sich 27 Personen (nicht 20). Die Christentum- und Islam-Listen fehlen noch – du kannst sie unter „Namen-Trainer → Bearbeiten“ ergänzen. ' +
-  'Die Berufe stehen nicht in der Namensliste: Sie sind aus Allgemeinwissen eingetragen und als „bitte prüfen“ markiert.';
+  'Gelernt werden nur Vor- und Nachnamen (keine Berufe).';

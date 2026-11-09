@@ -63,24 +63,14 @@ export function buildPersonItems(persons: Person[]): Item[] {
   const items: Item[] = [];
   for (const P of persons) {
     const full = `${P.first} ${P.last}`;
-    const unsicher = [P.pairingUncertain ? '⚠️ Paarung unsicher' : '', P.jobNote ? `⚠️ ${P.jobNote}` : ''].filter(Boolean).join(' ') || undefined;
-    const same = persons.filter((o) => o.id !== P.id && (o.job === P.job || o.jobAccept?.some((k) => P.jobAccept?.includes(k))));
-    const sameJob = same.map((o) => `${o.first} ${o.last}`);
+    const unsicher = P.pairingUncertain ? '⚠️ Paarung unsicher: durch Ausschluss ermittelt (diese Namen blieben übrig).' : undefined;
+    const merk = /^Mar[ck]$/.test(P.first) ? 'Achtung Schreibweise: MarC Chagall (mit C, Maler), MarK Zuckerberg (mit K).' : undefined;
     items.push({ id: `p-${P.id}-fl`, topic: 'namen', sub: 'Nachnamen', kind: 'input', tf: true,
       prompts: [`Vorname: ${P.first} → Wie lautet der Nachname?`, `${P.first} … ? (Nachname ergänzen)`],
-      answer: P.last, pool: 'nachname', uncertain: P.pairingUncertain ? unsicher : undefined, explain: `${full} – ${P.job}` });
+      answer: P.last, pool: 'nachname', uncertain: unsicher, explain: full, mnemonic: merk });
     items.push({ id: `p-${P.id}-lf`, topic: 'namen', sub: 'Vornamen', kind: 'input', tf: true,
       prompts: [`Nachname: ${P.last} → Wie lautet der Vorname?`, `… ${P.last} (Vorname ergänzen)`],
-      answer: P.first, pool: 'vorname', uncertain: P.pairingUncertain ? unsicher : undefined, explain: `${full} – ${P.job}` });
-    if (P.job) {
-      const groups = [P.jobAccept && P.jobAccept.length ? P.jobAccept : [P.job]];
-      items.push({ id: `p-${P.id}-job`, topic: 'namen', sub: 'Berufe', kind: 'list',
-        prompts: [`Welchen Beruf hat/hatte ${full}?`, `${full} – was ist/war sie oder er von Beruf?`],
-        answer: P.job, groups, min: 1, uncertain: unsicher, pool: 'beruf', exclude: same.map((o) => o.job) });
-      items.push({ id: `p-${P.id}-who`, topic: 'namen', sub: 'Personen erkennen', kind: 'choice',
-        prompts: [`Wer ist gemeint? Beruf: ${P.job}`], answer: full, pool: 'person', exclude: sameJob, uncertain: unsicher,
-        explain: sameJob.length ? `Gleicher Beruf auch bei: ${sameJob.join(', ')}` : undefined });
-    }
+      answer: P.first, pool: 'vorname', uncertain: unsicher, explain: full, mnemonic: merk });
   }
   return items;
 }
@@ -143,7 +133,7 @@ export function buildContent(persons: Person[], cards: CustomCard[]): Content {
   const corePools = new Map<string, Set<string>>();
   poolSets.forEach((v, k) => corePools.set(k, new Set(v)));
   for (const [k, vs] of Object.entries(EXTRA_POOLS)) vs.forEach((v) => add(k, v));
-  persons.forEach((p) => { add('person', `${p.first} ${p.last}`); add('beruf', p.job); });
+  persons.forEach((p) => add('person', `${p.first} ${p.last}`));
   const pools = new Map<string, string[]>();
   poolSets.forEach((s, k) => pools.set(k, [...s]));
   return { items, byId, pools, corePools };

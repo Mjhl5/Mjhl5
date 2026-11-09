@@ -9,7 +9,7 @@ import MatchGame, { type MatchPair } from '../components/MatchGame';
 import { Bar, Btn, Card, ConfirmBtn, PageTitle, Tag } from '../components/ui';
 import type { Item } from '../types';
 
-type Section = 'Länder & Hauptstädte' | 'Religionen der Länder' | 'Steckbriefe' | 'Vergleich' | 'Evangelien' | 'Persönlichkeiten' | 'Berufe';
+type Section = 'Länder & Hauptstädte' | 'Religionen der Länder' | 'Steckbriefe' | 'Vergleich' | 'Evangelien' | 'Persönlichkeiten';
 type Task =
   | { kind: 'q'; item: Item; mode: QMode; section: Section; typ: string }
   | { kind: 'match'; pairs: MatchPair[]; section: Section; title: string; typ: string; left: string; right: string };
@@ -25,7 +25,7 @@ export function gradeFor(pct: number): string {
   return '6';
 }
 
-function buildExam(items: Item[], long: boolean, persons: { id: string; first: string; last: string; job: string }[]): Task[] {
+function buildExam(items: Item[], long: boolean, persons: { id: string; first: string; last: string }[]): Task[] {
   const f = (pred: (i: Item) => boolean, n: number) => shuffle(items.filter(pred)).slice(0, n);
   const m = long ? 1 : 0.6;
   const n = (x: number) => Math.max(1, Math.round(x * m));
@@ -56,18 +56,15 @@ function buildExam(items: Item[], long: boolean, persons: { id: string; first: s
   if (persons.length >= 4) {
     t.push({ kind: 'match', section: 'Persönlichkeiten', title: 'Verbinde Vor- und Nachnamen.', typ: 'Zuordnung', left: 'Vorname', right: 'Nachname',
       pairs: shuffle(persons).slice(0, 5).map((x) => ({ left: x.first, right: x.last, itemId: `p-${x.id}-fl` })) });
-    t.push({ kind: 'match', section: 'Berufe', title: 'Ordne den Personen ihre Berufe zu.', typ: 'Zuordnung', left: 'Person', right: 'Beruf',
-      pairs: shuffle(persons.filter((x) => x.job)).slice(0, 4).map((x) => ({ left: `${x.first} ${x.last}`, right: x.job, itemId: `p-${x.id}-job` })) });
   }
-  f((i) => i.topic === 'namen' && (i.id.endsWith('-fl') || i.id.endsWith('-lf')), n(4)).forEach((item) => t.push({ kind: 'q', item, mode: 'auto', section: 'Persönlichkeiten', typ: 'Freitext' }));
-  f((i) => i.topic === 'namen' && i.id.endsWith('-job'), n(2)).forEach((item) => t.push({ kind: 'q', item, mode: 'auto', section: 'Berufe', typ: 'Freitext' }));
-  f((i) => i.topic === 'namen' && i.id.endsWith('-who'), n(2)).forEach((item) => t.push({ kind: 'q', item, mode: 'auto', section: 'Berufe', typ: 'Multiple Choice' }));
+  f((i) => i.topic === 'namen' && (i.id.endsWith('-fl') || i.id.endsWith('-lf')), n(5)).forEach((item) => t.push({ kind: 'q', item, mode: 'auto', section: 'Persönlichkeiten', typ: 'Freitext' }));
+  f((i) => i.topic === 'namen', n(2)).forEach((item) => t.push({ kind: 'q', item, mode: 'choice', section: 'Persönlichkeiten', typ: 'Multiple Choice' }));
   // Durchmischen, aber Zuordnungen verteilt lassen
   return shuffle(t);
 }
 
 const SECTION_ROUTE: Record<Section, string> = {
-  'Länder & Hauptstädte': 'laender', 'Religionen der Länder': 'laender', Steckbriefe: 'religionen', Vergleich: 'vergleich', Evangelien: 'evangelien', Persönlichkeiten: 'namen', Berufe: 'namen',
+  'Länder & Hauptstädte': 'laender', 'Religionen der Länder': 'laender', Steckbriefe: 'religionen', Vergleich: 'vergleich', Evangelien: 'evangelien', Persönlichkeiten: 'namen',
 };
 
 export default function KlausurPage() {
@@ -123,7 +120,7 @@ export default function KlausurPage() {
         <PageTitle icon="📝" title="Klausur-Simulator" sub="Wie eine echte Prüfung: keine Hilfe, keine Rückmeldung bis zum Ende. Danach Note, Musterlösung und Lern-Empfehlung." />
         <Card>
           <h2 className="font-extrabold">Was drankommt</h2>
-          <p className="mt-1 text-sm text-slate-500">Länder & Hauptstädte · Kontinente · Religionen · Steckbriefe · Vergleich · Evangelien · Persönlichkeiten · Berufe</p>
+          <p className="mt-1 text-sm text-slate-500">Länder & Hauptstädte · Kontinente · Religionen · Steckbriefe · Vergleich · Evangelien · Persönlichkeiten (Namen)</p>
           <p className="mt-1 text-sm text-slate-500">Aufgabentypen: Freitext · Multiple Choice · Zuordnung · Lückentext · Richtig/Falsch · Karte</p>
           <div className="mt-4 flex flex-wrap gap-2">
             <Btn size="lg" onClick={() => start(false)}>Kurze Klausur (ca. 25 Aufgaben)</Btn>

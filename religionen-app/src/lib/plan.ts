@@ -17,7 +17,7 @@ export const PLAN: PlanBlock[] = [
   { id: 'steckbriefe', from: 20, to: 45, title: 'Steckbriefe der drei Religionen', desc: 'Judentum, Christentum und Islam', icon: '📋', kind: 'quiz', filter: (i) => ['judentum', 'christentum', 'islam'].includes(i.topic) },
   { id: 'vergleich', from: 45, to: 60, title: 'Vergleich der drei Religionen', desc: 'Gott, Symbol, Schrift, Stadt, Gotteshaus, Fest', icon: '⚖️', kind: 'quiz', filter: (i) => i.topic === 'vergleich' },
   { id: 'evangelien', from: 60, to: 75, title: 'Evangelien und Symbole', desc: 'Mt–Mk–Lk–Jh = Engel–Löwe–Stier–Adler', icon: '📖', kind: 'quiz', filter: (i) => i.topic === 'evangelien' },
-  { id: 'namen', from: 75, to: 95, title: 'Persönlichkeiten und Berufe', desc: 'Vor- und Nachnamen, Berufe', icon: '👤', kind: 'quiz', filter: (i) => i.topic === 'namen' },
+  { id: 'namen', from: 75, to: 95, title: 'Persönlichkeiten', desc: 'Vor- und Nachnamen zusammensetzen', icon: '👤', kind: 'quiz', filter: (i) => i.topic === 'namen' },
   { id: 'pruefung', from: 95, to: 110, title: 'Gemischte Prüfung', desc: 'Klausur-Simulation mit allen Themen', icon: '📝', kind: 'exam', filter: () => true },
   { id: 'fehler', from: 110, to: 120, title: 'Nur noch meine Fehler', desc: 'Alles, was noch nicht sitzt', icon: '🎯', kind: 'errors', filter: () => true },
 ];

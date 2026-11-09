@@ -34,6 +34,6 @@ Prüft u. a., dass jede Musterlösung von der Antwortprüfung als richtig erkann
 
 ## Inhalte ergänzen
 
-- **Fehlende Persönlichkeiten (Christentum/Islam):** in der App unter *Namen → Bearbeiten / ergänzen* (eine Person pro Zeile: `Vorname; Nachname; Beruf`).
+- **Fehlende Persönlichkeiten (Christentum/Islam):** in der App unter *Namen → Bearbeiten / ergänzen* (eine Person pro Zeile: `Vorname; Nachname`).
 - **Weitere Fragen aus den Arbeitsblättern:** unter *Daten & Sicherung → Eigene Prüfungsfragen*.
 - Im Code: `src/data/*.ts`.
