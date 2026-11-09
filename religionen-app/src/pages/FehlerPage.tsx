@@ -4,7 +4,7 @@ import { useNav } from '../lib/nav';
 import { confusions, weakItems } from '../lib/stats';
 import { TOPIC_ICON, TOPIC_LABEL } from '../lib/content';
 import { MASTERED_BOX } from '../lib/srs';
-import { Btn, Card, PageTitle, Tag } from '../components/ui';
+import { Btn, Card, ConfirmBtn, PageTitle, Tag } from '../components/ui';
 
 const CATS: { label: string; test: (sub: string, topic: string) => boolean }[] = [
   { label: '🏙️ Falsche Hauptstädte', test: (s) => s === 'Hauptstädte' || s === 'Komplette Zuordnung' },
@@ -94,7 +94,7 @@ export default function FehlerPage() {
       )}
 
       {p.mistakes.length > 0 && (
-        <Btn variant="ghost" onClick={() => { if (confirm('Fehlerliste wirklich leeren? (Der Lernstand der Fragen bleibt erhalten.)')) update((x) => ({ ...x, mistakes: [], states: Object.fromEntries(Object.entries(x.states).map(([k, v]) => [k, { ...v, wrong: 0 }])) })); }}>Fehlerliste leeren</Btn>
+        <ConfirmBtn variant="ghost" label="Fehlerliste leeren" onConfirm={() => update((x) => ({ ...x, mistakes: [], states: Object.fromEntries(Object.entries(x.states).map(([k, v]) => [k, { ...v, wrong: 0 }])) }))} />
       )}
     </div>
   );

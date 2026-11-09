@@ -5,7 +5,7 @@ import { NAMENSLISTE_JUDENTUM, PERSONEN_HINWEIS, PERSONEN_STANDARD } from '../da
 import { aggregate } from '../lib/stats';
 import { shuffle } from '../lib/srs';
 import MatchTrainer from '../components/MatchTrainer';
-import { Btn, Card, ModeButton, PageTitle, Tag } from '../components/ui';
+import { Btn, Card, ConfirmBtn, ModeButton, PageTitle, Tag } from '../components/ui';
 import type { Person } from '../types';
 
 type Group = Person['group'];
@@ -182,7 +182,7 @@ function PersonEditor({ onClose }: { onClose: () => void }) {
       <div className="sticky bottom-3 flex flex-wrap gap-2 rounded-2xl bg-white/90 p-3 shadow-lg backdrop-blur dark:bg-slate-900/90">
         <Btn size="lg" onClick={save}>💾 Speichern</Btn>
         <Btn size="lg" variant="secondary" onClick={onClose}>Abbrechen</Btn>
-        {p.persons && <Btn size="lg" variant="ghost" onClick={() => { if (confirm('Wirklich alle Änderungen an den Personen löschen und die Standardliste wiederherstellen?')) { update((prev) => ({ ...prev, persons: null })); onClose(); } }}>Standardliste wiederherstellen</Btn>}
+        {p.persons && <ConfirmBtn size="lg" variant="ghost" label="Standardliste wiederherstellen" confirmLabel="Änderungen löschen? Nochmal tippen" onConfirm={() => { update((prev) => ({ ...prev, persons: null })); onClose(); }} />}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode, type ButtonHTMLAttributes } from 'react';
+import { forwardRef, useEffect, useState, type ReactNode, type ButtonHTMLAttributes } from 'react';
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <div className={`rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-5 ${className}`}>{children}</div>;
@@ -56,5 +56,20 @@ export function ModeButton({ title, desc, icon, onClick, badge }: { title: strin
       </span>
       <span className="text-slate-400 transition group-hover:translate-x-1 group-hover:text-indigo-500">→</span>
     </button>
+  );
+}
+
+/** Knopf mit eingebauter Sicherheitsabfrage (zweimal tippen) – ohne Browser-Dialog */
+export function ConfirmBtn({ label, confirmLabel = 'Sicher? Nochmal tippen', onConfirm, ...rest }: Omit<BtnProps, 'onClick'> & { label: ReactNode; confirmLabel?: string; onConfirm: () => void }) {
+  const [armed, setArmed] = useState(false);
+  useEffect(() => {
+    if (!armed) return;
+    const t = setTimeout(() => setArmed(false), 4000);
+    return () => clearTimeout(t);
+  }, [armed]);
+  return (
+    <Btn {...rest} variant={armed ? 'danger' : rest.variant} onClick={() => (armed ? (setArmed(false), onConfirm()) : setArmed(true))}>
+      {armed ? confirmLabel : label}
+    </Btn>
   );
 }

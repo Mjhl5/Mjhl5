@@ -48,7 +48,7 @@ export default function App() {
   const go = (r: Route) => {
     setSession(null);
     if (readRoute() === r) setRoute(r);
-    else window.location.hash = `/${r}`;
+    else window.location.hash = r;
     window.scrollTo({ top: 0 });
   };
   const startSession = (cfg: Omit<SessionProps, 'onExit'>) => { setSession(cfg); window.scrollTo({ top: 0 }); };

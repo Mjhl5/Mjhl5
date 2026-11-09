@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { exportProgress, parseProgress, useStore } from '../lib/store';
 import { useNav } from '../lib/nav';
-import { Btn, Card, PageTitle } from '../components/ui';
+import { Btn, Card, ConfirmBtn, PageTitle } from '../components/ui';
 
 export default function DatenPage() {
   const { p, content, update, reset } = useStore();
@@ -10,6 +10,7 @@ export default function DatenPage() {
   const [a, setA] = useState('');
   const [alt, setAlt] = useState('');
   const [msg, setMsg] = useState('');
+  const [txt, setTxt] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
   const custom = content.items.filter((i) => i.topic === 'zusatz');
 
@@ -75,12 +76,21 @@ export default function DatenPage() {
           <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
         </div>
         {msg && <p className="mt-2 text-sm font-semibold">{msg}</p>}
+        <details className="mt-3 text-sm">
+          <summary className="cursor-pointer font-semibold text-slate-500">Sicherung als Text (falls Herunterladen nicht geht)</summary>
+          <p className="mt-2 text-xs text-slate-500">Kopieren und z. B. in eine Notiz einfügen. Zum Laden: Text unten einfügen und „Aus Text laden“ tippen.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Btn size="sm" variant="secondary" onClick={() => { const t = exportProgress(p); navigator.clipboard?.writeText(t).then(() => setMsg('✅ Lernstand kopiert.'), () => { setTxt(t); setMsg('Text unten markieren und kopieren.'); }); }}>📋 Lernstand kopieren</Btn>
+            <Btn size="sm" variant="secondary" disabled={!txt.trim()} onClick={() => { const np = parseProgress(txt); if (!np) return setMsg('❌ Text ist keine gültige Sicherung.'); update(() => np); setMsg('✅ Lernstand geladen.'); }}>Aus Text laden</Btn>
+          </div>
+          <textarea id="backup-text" value={txt} onChange={(e) => setTxt(e.target.value)} rows={4} className={`${inp} mt-2 font-mono text-xs`} placeholder="Sicherung hier einfügen …" />
+        </details>
       </Card>
 
       <Card>
         <h2 className="font-extrabold text-rose-600">⚠️ Alles zurücksetzen</h2>
         <p className="mt-1 text-sm text-slate-500">Löscht Lernstand, Fehler, Lernzeit, eigene Fragen und Änderungen an Personen.</p>
-        <Btn className="mt-3" variant="danger" onClick={() => { if (confirm('Wirklich ALLES löschen?')) reset(); }}>Alles zurücksetzen</Btn>
+        <ConfirmBtn className="mt-3" variant="danger" label="Alles zurücksetzen" confirmLabel="Wirklich ALLES löschen? Nochmal tippen" onConfirm={reset} />
       </Card>
     </div>
   );

@@ -6,7 +6,7 @@ import { LAENDER } from '../data/laender';
 import { EVANGELIEN } from '../data/evangelien';
 import QuestionCard, { type QMode, type QResult } from '../components/QuestionCard';
 import MatchGame, { type MatchPair } from '../components/MatchGame';
-import { Bar, Btn, Card, PageTitle, Tag } from '../components/ui';
+import { Bar, Btn, Card, ConfirmBtn, PageTitle, Tag } from '../components/ui';
 import type { Item } from '../types';
 
 type Section = 'Länder & Hauptstädte' | 'Religionen der Länder' | 'Steckbriefe' | 'Vergleich' | 'Evangelien' | 'Persönlichkeiten' | 'Berufe';
@@ -221,7 +221,7 @@ export default function KlausurPage() {
   return (
     <div className="mx-auto max-w-2xl">
       <div className="mb-3 flex items-center gap-3">
-        <Btn variant="ghost" size="sm" onClick={() => { if (confirm('Klausur abbrechen?')) setTasks(null); }}>✕</Btn>
+        <ConfirmBtn variant="ghost" size="sm" label="✕" confirmLabel="Abbrechen?" onConfirm={() => setTasks(null)} />
         <div className="flex-1">
           <div className="mb-1 flex justify-between text-xs font-semibold text-slate-500"><span>Aufgabe {idx + 1} von {tasks.length}</span><span>{task.section}</span></div>
           <Bar value={idx / tasks.length} />
