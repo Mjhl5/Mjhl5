@@ -41,7 +41,7 @@ export function buildLaenderItems(): Item[] {
       prompts: [`${L.hauptstadt} ist die Hauptstadt von welchem Land?`, `Zu welchem Land gehört die Hauptstadt ${L.hauptstadt}?`],
       answer: L.land, accept: L.landAlt, pool: 'land', mnemonic: merk });
     items.push({ id: `l-${L.nr}-kont`, topic: 'laender', sub: 'Kontinente', kind: 'choice', tf: true,
-      prompts: [`Auf welchem Kontinent liegt ${L.land}?`, `${L.land} – welcher Kontinent?`],
+      prompts: [`Auf welchem Kontinent ${(WO[L.land] ?? `Wo liegt ${L.land}?`).replace(/^Wo /, '').replace(/\?$/, '')}?`, `${L.land} – welcher Kontinent?`],
       answer: L.kontinent, accept: L.kontAlt, options: KONTINENTE, pool: 'kontinent', mnemonic: merk });
     items.push({ id: `l-${L.nr}-rel`, topic: 'laender', sub: 'Religionen der Länder', kind: 'input', tf: true,
       prompts: [`Welche Religion ist ${inn} vorherrschend?`, `${L.land} – welche Religion haben die meisten Menschen?`],
