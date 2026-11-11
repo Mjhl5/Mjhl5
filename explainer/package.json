@@ -1,0 +1,18 @@
+{
+  "name": "minimalist-explainer",
+  "version": "1.0.0",
+  "description": "Minimalist black & white animated explainer renderer (line-art, glow, dotted backgrounds)",
+  "scripts": {
+    "render": "node render.mjs",
+    "still": "node render.mjs --still",
+    "sfx": "python3 tools/make_sfx.py",
+    "align": "python3 tools/align.py"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.65"
+  },
+  "private": true
+}
